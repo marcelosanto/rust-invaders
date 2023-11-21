@@ -1,4 +1,4 @@
-use crate::{NUM_COLS, NUM_ROWS, frame::Drawable};
+use crate::{NUM_COLS, NUM_ROWS, frame::{Drawable, Frame}};
 
 #[derive(Default)]
 pub struct Player {
@@ -28,7 +28,7 @@ impl Player {
 }
 
 impl Drawable for Player {
-    fn draw(&self, frame: &mut crate::frame::Frame) {
+    fn draw(&self, frame: &mut Frame) {
         frame[self.x][self.y] = "A";
     }
 }

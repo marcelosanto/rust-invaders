@@ -7,8 +7,8 @@ use crossterm::{
     ExecutableCommand,
 };
 use invaders::{
-    frame::{self, new_frame},
-    render::{self, render},
+    frame::{self, new_frame, Drawable},
+    render::{self, render}, player::Player,
 };
 use rusty_audio::Audio;
 
@@ -50,9 +50,11 @@ fn main() -> Result<(), Box<dyn Error>> {
     });
 
     // Game loop
+    let mut player = Player::new();
+
     'gameloop: loop {
         // Per-frame init
-        let curr_frame = new_frame();
+        let mut curr_frame = new_frame();
 
         // Input
         while event::poll(Duration::default())? {
@@ -65,9 +67,9 @@ fn main() -> Result<(), Box<dyn Error>> {
 
                     event::KeyCode::Enter => todo!(),
 
-                    event::KeyCode::Left | KeyCode::Char('a') => todo!(),
+                    event::KeyCode::Left | KeyCode::Char('a') => player.move_left(),
 
-                    event::KeyCode::Right | KeyCode::Char('d') => todo!(),
+                    event::KeyCode::Right | KeyCode::Char('d') => player.move_right(),
 
                     event::KeyCode::Up | KeyCode::Char('w') => todo!(),
 
@@ -79,6 +81,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
 
         // Draw & render
+        player.draw(&mut curr_frame);
         let _ = render_tx.send(curr_frame);
         thread::sleep(Duration::from_millis(1));
     }
